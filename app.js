@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
+const mongoConnect = require("./config/database");
 
 // const User = require("./models/user");
 
@@ -24,20 +25,23 @@ app.use(shopRouter);
 app.use(errorController.getError);
 
 app.use((req, res, next) => {
-  User.findById('5bab316ce0a7c75f783cb8a8')
-    .then(user => {
+  User.findById("5bab316ce0a7c75f783cb8a8")
+    .then((user) => {
       req.user = user;
       next();
     })
-    .catch(err => console.log(err));
+    .catch((err) => console.log(err));
 });
+
+mongoose.set('strictQuery', true);
 
 mongoose
   .connect(
-    "mongodb+srv://korn:Rideon71773@cluster0.v2viw.mongodb.net/?retryWrites=true&w=majority"
+    mongoConnect
   )
-  .then((result) => {
+  .then(result => {
     app.listen(3000);
-    console.log("connected");
   })
-  .catch((err) => console.log(err));
+  .catch(err => {
+    console.log(err);
+  });
