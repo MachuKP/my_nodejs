@@ -18,7 +18,7 @@ exports.postAddProduct = (req, res, next) => {
     price: price,
     description: description,
     imageUrl: imageUrl,
-    userId: req.user._id
+    userId: req.user,
   });
   product
     .save()
@@ -78,6 +78,10 @@ exports.postEditProduct = (req, res, next) => {
 
 exports.getProducts = (req, res, next) => {
   Product.find()
+    // help to get only need data
+    // .select("title price -_id")
+    // help to create relative on schema
+    // .populate("userId", "name")
     .then((product) => {
       console.log(product);
       res.render("admin/products", {
@@ -96,7 +100,7 @@ exports.deleteProudct = (req, res, next) => {
   Product.findByIdAndRemove(productId)
     .then(() => {
       console.log("product delete!");
-      res.redirect('/admin/products')
+      res.redirect("/admin/products");
     })
     .catch((err) => console.log(err));
 };

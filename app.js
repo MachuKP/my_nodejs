@@ -4,8 +4,6 @@ const mongoose = require("mongoose");
 const mongoConnect = require("./config/database");
 const User = require("./models/user.js");
 
-// const User = require("./models/user");
-
 const path = require("path");
 
 const app = express();
@@ -20,20 +18,21 @@ const errorController = require("./controllers/error.js");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/admin", adminRouter);
-app.use(shopRouter);
-
-app.use(errorController.getError);
-
 //set dummy user
 app.use((req, res, next) => {
-  User.findById("63db74f2dbbb6e11ccceef74")
+  User.findById("63db75d67d4e7caaa258ae2e")
     .then((user) => {
       req.user = user;
       next();
     })
     .catch((err) => console.log(err));
 });
+
+
+app.use("/admin", adminRouter);
+app.use(shopRouter);
+
+app.use(errorController.getError);
 
 mongoose.set("strictQuery", true);
 
