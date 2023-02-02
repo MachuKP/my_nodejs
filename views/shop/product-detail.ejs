@@ -1,9 +1,9 @@
-<%- include('include/header.ejs') %>
+<%- include('includes/header.ejs') %>
     <link rel="stylesheet" href="/style/product.css">
 </head>
 
 <body>
-    <%- include('include/navigation.ejs') %>
+    <%- include('includes/navigation.ejs') %>
     <main class="centered">
         <h1><%= product.title %></h1>
         <hr>
@@ -14,4 +14,4 @@
         <h2><%= product.description %></h2>
         <%- include('../includes/add-to-cart.ejs') %>
     </main>
-<%- include('include/footer.ejs') %>
+<%- include('includes/footer.ejs') %>
