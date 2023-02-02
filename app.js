@@ -1,7 +1,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const mongoConnect = require("./config/database");
+const User = require("./models/user.js");
 
 // const User = require("./models/user");
 
@@ -24,8 +25,9 @@ app.use(shopRouter);
 
 app.use(errorController.getError);
 
+//set dummy user
 app.use((req, res, next) => {
-  User.findById("5bab316ce0a7c75f783cb8a8")
+  User.findById("63db74f2dbbb6e11ccceef74")
     .then((user) => {
       req.user = user;
       next();
@@ -33,15 +35,25 @@ app.use((req, res, next) => {
     .catch((err) => console.log(err));
 });
 
-mongoose.set('strictQuery', true);
+mongoose.set("strictQuery", true);
 
 mongoose
-  .connect(
-    mongoConnect
-  )
-  .then(result => {
+  .connect(mongoConnect)
+  .then((result) => {
+    //create dummy user when don't have one
+    User.findOne().then((item) => {
+      if (!item) {
+        const user = new User({
+          name: "test",
+          email: "test@mail.com",
+          cart: {
+            items: [],
+          },
+        }).save();
+      }
+    });
     app.listen(3000);
   })
-  .catch(err => {
+  .catch((err) => {
     console.log(err);
   });
