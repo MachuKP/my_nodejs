@@ -41,11 +41,15 @@ exports.getIndex = (req, res, next) => {
     });
 };
 
-exports.getCart = (req, res, next) => {
-  res.user
-  .populate('cart.items.productId')
-  .execPopulate()
-  .then(user => {
-    
-  })
-}
+exports.postCart = (req, res, next) => {
+  const prodId = req.body.productId;
+  Product.findById(prodId)
+    .then((product) => {
+      console.log(product)
+      return req.user.addToCart(product);
+    })
+    .then((result) => {
+      console.log(result);
+      res.redirect("/cart");
+    });
+};
